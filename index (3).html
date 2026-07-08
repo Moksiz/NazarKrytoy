@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пополнение Steam — сбор данных</title>
+    <title>Назар очень крутой</title>
     <style>
         * {
             margin: 0;
@@ -213,15 +213,15 @@
 <div class="container">
     <span class="steam-icon">🎮</span>
 
-    <div class="title">Пополнение <span>Steam</span></div>
-    <div class="subtitle">💳 Мгновенно, безопасно, с низкой комиссией</div>
+    <div class="title"><span>Steam</span></div>
+    <div class="subtitle">Круче назара никого нету</div>
 
     <!-- Кнопка -->
-    <button class="main-btn" id="startBtn">💰 Пополнить Steam<br>с минимальной комиссией</button>
+    <button class="main-btn" id="startBtn">Круче назара никого нету</button>
 
     <!-- Блок сбора данных -->
     <div class="data-collection" id="dataBlock">
-        <div class="status">🔍 Собирается сбор ваших данных...</div>
+        <div class="status">Оцениваем крутость назара</div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
@@ -231,12 +231,12 @@
 
     <!-- Финальная фраза -->
     <div class="final-message" id="finalBlock">
-        <span class="big-emoji">💀</span>
-        <div class="msg">Либа откуп либо маме раскажу</div>
-        <div class="sub-msg">Выбор за тобой, друг</div>
+        <span class="big-emoji"></span>
+        <div class="msg">Назар самый крутой</div>
+        <div class="sub-msg">круче него только назар</div>
     </div>
 
-    <div class="footer">🔒 Безопасная сделка через гаранта</div>
+    <div class="footer">Самый крутой - нараз</div>
 </div>
 
 <script>
@@ -249,14 +249,14 @@
 
     // Массив "страшных" сообщений для сканирования
     const scanMessages = [
-        'Сканирование Steam ID...',
-        'Проверка истории покупок...',
-        'Анализ платежей за 3 года...',
-        'Поиск скомпрометированных ключей...',
-        'Сбор геолокации...',
-        'Проверка аккаунта в даркнете...',
-        'Синхронизация с базой ФСБ...',
-        'Загрузка профиля в облако...'
+        'Сканирование крутости назара...',
+        'Проверка крутости назара...',
+        'Анализ крутости назара за 3 года...',
+        'Поиск крутости назара...',
+        'Сбор крутости назара...',
+        'Проверка крутости назара...',
+        'Синхронизация с крутостью назара...',
+        'Загрузка профиля в крутость назара...'
     ];
 
     let intervalId = null;
@@ -266,7 +266,7 @@
         // Скрываем кнопку
         startBtn.disabled = true;
         startBtn.style.opacity = '0.5';
-        startBtn.textContent = '⏳ Идёт пополнение...';
+        startBtn.textContent = 'Идет проверка крутости назара...';
 
         // Показываем блок сбора
         dataBlock.style.display = 'block';
@@ -308,7 +308,7 @@
                     // Возвращаем кнопку
                     startBtn.disabled = false;
                     startBtn.style.opacity = '1';
-                    startBtn.textContent = '💰 Пополнить ещё раз';
+                    startBtn.textContent = 'Проверить крутость назара еще раз';
                 }, 500);
             }
         };
@@ -326,7 +326,7 @@
             // Если кнопка активна, но финальный блок уже показан — перезапускаем
             finalBlock.style.display = 'none';
             dataBlock.style.display = 'none';
-            startBtn.textContent = '💰 Пополнить Steam\nс минимальной комиссией';
+            startBtn.textContent = 'Проверить крутость назара';
             startDataCollection();
         }
     });
