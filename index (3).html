@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пополнение Steam — сбор данных</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1b2838;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at 20% 30%, #2a3f5e 0%, #0d1a2b 90%);
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(30, 45, 65, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid #4a6a8a;
+            border-radius: 40px;
+            padding: 50px 30px 40px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            transition: 0.3s;
+            min-height: 400px;
+        }
+
+        .container:hover {
+            border-color: #66aaff;
+            box-shadow: 0 20px 80px rgba(0, 120, 255, 0.15);
+        }
+
+        .steam-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 20px #66aaff);
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .title span {
+            color: #66ccff;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #8aaac0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #2a4a6a;
+            padding-bottom: 16px;
+        }
+
+        /* Кнопка */
+        .main-btn {
+            background: #2a4a6a;
+            border: none;
+            padding: 24px 40px;
+            border-radius: 60px;
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.25s;
+            box-shadow: 0 8px 0 #0d2a3a, 0 10px 40px rgba(0, 80, 200, 0.2);
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            letter-spacing: 1px;
+            border: 1px solid #4a7aaa;
+            text-shadow: 0 2px 0 #0d2a3a;
+        }
+
+        .main-btn:hover {
+            background: #3a6a9a;
+            transform: scale(1.02);
+            box-shadow: 0 8px 0 #1a3a5a, 0 15px 50px rgba(0, 80, 200, 0.4);
+        }
+
+        .main-btn:active {
+            transform: scale(0.97);
+        }
+
+        .main-btn:disabled {
+            opacity: 0.6;
+            transform: scale(0.98);
+            cursor: not-allowed;
+        }
+
+        /* Блок сбора данных */
+        .data-collection {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(10, 20, 35, 0.7);
+            border-radius: 30px;
+            border: 1px solid #4a6a8a;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .data-collection .status {
+            font-size: 20px;
+            color: #8aaac0;
+            margin-bottom: 12px;
+        }
+
+        .data-collection .progress-bar {
+            width: 100%;
+            height: 14px;
+            background: #0d1a2b;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #2a4a6a;
+            margin: 12px 0;
+        }
+
+        .data-collection .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #66ccff, #4a7aaa);
+            border-radius: 20px;
+            transition: width 0.15s linear;
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+        }
+
+        .data-collection .percent {
+            font-size: 28px;
+            font-weight: 800;
+            color: #66ccff;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+        }
+
+        .data-collection .scan-line {
+            font-size: 14px;
+            color: #5a7a8a;
+            margin-top: 10px;
+            font-family: monospace;
+            letter-spacing: 1px;
+            min-height: 22px;
+        }
+
+        /* Результат (финальная фраза) */
+        .final-message {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(40, 20, 20, 0.6);
+            border-radius: 30px;
+            border: 2px solid #ff8844;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .final-message .big-emoji {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .final-message .msg {
+            font-size: 30px;
+            font-weight: 800;
+            color: #ffbb77;
+            text-shadow: 0 0 30px #ff8800;
+            letter-spacing: 1px;
+        }
+
+        .final-message .sub-msg {
+            font-size: 16px;
+            color: #ccaa88;
+            margin-top: 6px;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #4a6a7a;
+            font-size: 13px;
+            border-top: 1px solid #1a2a3a;
+            padding-top: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .container { padding: 30px 18px; }
+            .title { font-size: 24px; }
+            .main-btn { font-size: 20px; padding: 18px 20px; }
+            .final-message .msg { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <span class="steam-icon">🎮</span>
+
+    <div class="title">Пополнение <span>Steam</span></div>
+    <div class="subtitle">💳 Мгновенно, безопасно, с низкой комиссией</div>
+
+    <!-- Кнопка -->
+    <button class="main-btn" id="startBtn">💰 Пополнить Steam<br>с минимальной комиссией</button>
+
+    <!-- Блок сбора данных -->
+    <div class="data-collection" id="dataBlock">
+        <div class="status">🔍 Собирается сбор ваших данных...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="percent" id="percentDisplay">0%</div>
+        <div class="scan-line" id="scanLine">Инициализация...</div>
+    </div>
+
+    <!-- Финальная фраза -->
+    <div class="final-message" id="finalBlock">
+        <span class="big-emoji">💀</span>
+        <div class="msg">Либа откуп либо маме раскажу</div>
+        <div class="sub-msg">Выбор за тобой, друг</div>
+    </div>
+
+    <div class="footer">🔒 Безопасная сделка через гаранта</div>
+</div>
+
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const dataBlock = document.getElementById('dataBlock');
+    const finalBlock = document.getElementById('finalBlock');
+    const progressFill = document.getElementById('progressFill');
+    const percentDisplay = document.getElementById('percentDisplay');
+    const scanLine = document.getElementById('scanLine');
+
+    // Массив "страшных" сообщений для сканирования
+    const scanMessages = [
+        'Сканирование Steam ID...',
+        'Проверка истории покупок...',
+        'Анализ платежей за 3 года...',
+        'Поиск скомпрометированных ключей...',
+        'Сбор геолокации...',
+        'Проверка аккаунта в даркнете...',
+        'Синхронизация с базой ФСБ...',
+        'Загрузка профиля в облако...'
+    ];
+
+    let intervalId = null;
+    let progress = 0;
+
+    function startDataCollection() {
+        // Скрываем кнопку
+        startBtn.disabled = true;
+        startBtn.style.opacity = '0.5';
+        startBtn.textContent = '⏳ Идёт пополнение...';
+
+        // Показываем блок сбора
+        dataBlock.style.display = 'block';
+        finalBlock.style.display = 'none';
+
+        // Сбрасываем прогресс
+        progress = 0;
+        progressFill.style.width = '0%';
+        percentDisplay.textContent = '0%';
+        scanLine.textContent = '🔍 Инициализация...';
+
+        // Запускаем быстрый прогресс (до 100% за ~3-4 секунды)
+        const step = () => {
+            // Увеличиваем прогресс случайным скачком (от 1% до 6%)
+            const increment = 1 + Math.floor(Math.random() * 6);
+            progress = Math.min(100, progress + increment);
+
+            // Обновляем визуал
+            progressFill.style.width = progress + '%';
+            percentDisplay.textContent = progress + '%';
+
+            // Меняем сообщение сканирования случайным образом
+            const randomIndex = Math.floor(Math.random() * scanMessages.length);
+            scanLine.textContent = '🔎 ' + scanMessages[randomIndex];
+
+            // Если прогресс достиг 100% — финиш
+            if (progress >= 100) {
+                clearInterval(intervalId);
+                progressFill.style.width = '100%';
+                percentDisplay.textContent = '100%';
+                scanLine.textContent = '✅ Сбор данных завершён!';
+
+                // Через 0.5 секунды показываем финальную фразу
+                setTimeout(() => {
+                    // Скрываем блок сбора (плавно)
+                    dataBlock.style.display = 'none';
+                    // Показываем финальную пасхалку
+                    finalBlock.style.display = 'block';
+                    // Возвращаем кнопку
+                    startBtn.disabled = false;
+                    startBtn.style.opacity = '1';
+                    startBtn.textContent = '💰 Пополнить ещё раз';
+                }, 500);
+            }
+        };
+
+        // Запускаем интервал с обновлением каждые 80-120 мс (для быстрых процентов)
+        intervalId = setInterval(step, 80 + Math.floor(Math.random() * 50));
+    }
+
+    // Обработчик нажатия на кнопку
+    startBtn.addEventListener('click', startDataCollection);
+
+    // Если нажать второй раз после завершения — всё заново
+    startBtn.addEventListener('click', function() {
+        if (!startBtn.disabled && finalBlock.style.display === 'block') {
+            // Если кнопка активна, но финальный блок уже показан — перезапускаем
+            finalBlock.style.display = 'none';
+            dataBlock.style.display = 'none';
+            startBtn.textContent = '💰 Пополнить Steam\nс минимальной комиссией';
+            startDataCollection();
+        }
+    });
+</script>
+
+</body>
+</html>
